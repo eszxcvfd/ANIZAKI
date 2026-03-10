@@ -1,0 +1,11 @@
+@Anizaki.Api_HostAddress = http://localhost:5080
+
+GET {{Anizaki.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{Anizaki.Api_HostAddress}}/api/v1/system/status?correlationId=local-smoke
+Accept: application/json
+
+###
