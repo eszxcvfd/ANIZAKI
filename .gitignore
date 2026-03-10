@@ -1,0 +1,51 @@
+# ------------------------------------------------------------
+# Tooling and local caches
+# ------------------------------------------------------------
+.bv/
+.DS_Store
+Thumbs.db
+
+# ------------------------------------------------------------
+# Node / frontend outputs
+# ------------------------------------------------------------
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ------------------------------------------------------------
+# .NET / backend outputs
+# ------------------------------------------------------------
+bin/
+obj/
+TestResults/
+*.user
+*.suo
+*.cache
+
+# ------------------------------------------------------------
+# Environment and local secrets
+# ------------------------------------------------------------
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+!.env.*.example
+
+# Environment-specific settings (keep baseline/example configs tracked)
+appsettings.*.json
+!appsettings.json
+!appsettings.example.json
+local.settings.json
+
+# ------------------------------------------------------------
+# IDE/editor local files
+# ------------------------------------------------------------
+.vscode/
+.idea/
