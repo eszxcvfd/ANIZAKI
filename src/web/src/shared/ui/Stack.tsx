@@ -7,6 +7,5 @@ type StackProps = {
 }
 
 export function Stack({ children, className }: StackProps) {
-  return <div className={cn('stack', className)}>{children}</div>
+  return <div className={cn('flex flex-col gap-4', className)}>{children}</div>
 }
-
