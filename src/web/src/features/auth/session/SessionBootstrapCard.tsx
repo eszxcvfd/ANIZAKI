@@ -51,72 +51,78 @@ export function SessionBootstrapCard({ nextPath }: SessionBootstrapCardProps) {
     window.location.assign(nextPath)
   }
 
-  const inputClassName =
-    'w-full rounded border border-slate-300 px-3 py-2 text-slate-800 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200'
-
   return (
     <Card title="Sign in context bootstrap">
-      <p className="mb-3">
+      <p className="text-slate-600 text-sm mb-6 font-medium">
         Role-aware routes require an authenticated session context. This temporary
         bootstrap stores the local session used by route guards.
       </p>
-      <div className="grid gap-3 md:grid-cols-2">
-        <label className="grid gap-1 md:col-span-2">
-          <span>Access token</span>
+      <div className="grid gap-5 md:grid-cols-2">
+        <div className="flex flex-col gap-2 md:col-span-2">
+          <label htmlFor="bootstrap-token" className="text-xs font-black text-slate-500 uppercase tracking-widest pl-1">Access token</label>
           <input
-            className={inputClassName}
+            id="bootstrap-token"
+            className="input-field"
             value={formState.accessToken}
             onChange={(event) => updateFormState('accessToken', event.target.value)}
             placeholder="Paste bearer token"
             type="text"
             autoComplete="off"
           />
-        </label>
-        <label className="grid gap-1">
-          <span>User ID</span>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="bootstrap-userid" className="text-xs font-black text-slate-500 uppercase tracking-widest pl-1">User ID</label>
           <input
-            className={inputClassName}
+            id="bootstrap-userid"
+            className="input-field"
             value={formState.userId}
             onChange={(event) => updateFormState('userId', event.target.value)}
             placeholder="User identifier"
             type="text"
             autoComplete="off"
           />
-        </label>
-        <label className="grid gap-1">
-          <span>User email</span>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="bootstrap-email" className="text-xs font-black text-slate-500 uppercase tracking-widest pl-1">User email</label>
           <input
-            className={inputClassName}
+            id="bootstrap-email"
+            className="input-field"
             value={formState.userEmail}
             onChange={(event) => updateFormState('userEmail', event.target.value)}
             placeholder="person@example.com"
             type="email"
             autoComplete="off"
           />
-        </label>
-        <label className="grid gap-1">
-          <span>Role</span>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="bootstrap-role" className="text-xs font-black text-slate-500 uppercase tracking-widest pl-1">Role</label>
           <select
-            className={inputClassName}
+            id="bootstrap-role"
+            className="input-field block w-full"
             value={formState.role}
             onChange={(event) => updateFormState('role', event.target.value as AuthRole)}
+            title="Select user role"
           >
             <option value="user">user</option>
             <option value="seller">seller</option>
             <option value="admin">admin</option>
           </select>
-        </label>
+        </div>
       </div>
-      <div className="mt-3">
+      <div className="mt-8">
         <button
-          className="rounded border border-sky-700 bg-sky-700 px-3 py-2 text-white disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn-primary w-full py-3 shadow-lg shadow-indigo-500/20 font-black"
           onClick={handleContinue}
           type="button"
         >
-          Continue
+          Initialize Context
         </button>
       </div>
-      {errorMessage ? <p className="mt-3 text-rose-700">{errorMessage}</p> : null}
+      {errorMessage ? (
+        <div className="mt-4 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-semibold animate-in fade-in slide-in-from-top-2">
+          {errorMessage}
+        </div>
+      ) : null}
     </Card>
   )
 }
