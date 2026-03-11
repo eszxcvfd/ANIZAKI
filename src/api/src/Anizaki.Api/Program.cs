@@ -23,6 +23,18 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserContext, HttpContextCurrentUserContext>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 builder.Services
     .AddAuthentication(options =>
     {
@@ -128,50 +140,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-app.UseExceptionHandler(errorApp =>
-{
-    errorApp.Run(async context =>
-    {
-        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-        var correlationId = CorrelationIdResolver.Resolve(context);
-
-        if (exception is RequestThrottledException throttledException)
-        {
-            context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-            if (throttledException.RetryAfterUtc is not null)
-            {
-                var remainingSeconds = Math.Max(
-                    1,
-                    (int)Math.Ceiling((throttledException.RetryAfterUtc.Value - DateTime.UtcNow).TotalSeconds));
-                context.Response.Headers.RetryAfter = remainingSeconds.ToString(CultureInfo.InvariantCulture);
-            }
-
-            await context.Response.WriteAsJsonAsync(new ApiErrorEnvelope(
-                Error: "too_many_requests",
-                Message: throttledException.Message,
-                CorrelationId: correlationId));
-            return;
-        }
-
-        if (exception is RequestValidationException validationException)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsJsonAsync(new ApiErrorEnvelope(
-                Error: "validation_failed",
-                Message: "Request validation failed.",
-                CorrelationId: correlationId,
-                Errors: validationException.Errors));
-            return;
-        }
-
-        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        await context.Response.WriteAsJsonAsync(new ApiErrorEnvelope(
-            Error: "internal_server_error",
-            Message: "An unexpected error occurred.",
-            CorrelationId: correlationId));
-    });
-});
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRateLimiter();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
