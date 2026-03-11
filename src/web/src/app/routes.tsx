@@ -1,6 +1,5 @@
 import type { ComponentType } from 'react'
 import type { AuthRole, AuthSession } from '../features/auth/session/authSession'
-import { LoginRequiredPage } from '../pages/auth/LoginRequiredPage'
 import { AdminConsolePage } from '../pages/admin/AdminConsolePage'
 import { ForbiddenPage } from '../pages/forbidden/ForbiddenPage'
 import { HomePage } from '../pages/home/HomePage'
@@ -18,6 +17,13 @@ type RouteConfig = {
   access: RouteAccess
 }
 
+import { RegisterPage } from '../pages/auth/RegisterPage'
+import { ForgotPasswordPage } from '../pages/auth/ForgotPasswordPage'
+import { ResetPasswordPage } from '../pages/auth/ResetPasswordPage'
+import { VerifyEmailPage } from '../pages/auth/VerifyEmailPage'
+import { LoginPage } from '../pages/auth/LoginPage'
+import { DevBootstrapPage } from '../pages/dev/DevBootstrapPage'
+
 const ROUTES: Record<string, RouteConfig> = {
   '/': {
     title: 'Home',
@@ -25,19 +31,44 @@ const ROUTES: Record<string, RouteConfig> = {
     access: { kind: 'public' },
   },
   '/profile': {
-    title: 'Profile',
+    title: 'User Profile',
     component: ProfilePage,
     access: { kind: 'authenticated' },
   },
   '/auth/login': {
-    title: 'Login',
-    component: LoginRequiredPage,
+    title: 'Sign In',
+    component: LoginPage,
+    access: { kind: 'public' },
+  },
+  '/auth/register': {
+    title: 'Create Account',
+    component: RegisterPage,
+    access: { kind: 'public' },
+  },
+  '/auth/forgot-password': {
+    title: 'Recover Password',
+    component: ForgotPasswordPage,
+    access: { kind: 'public' },
+  },
+  '/auth/reset-password': {
+    title: 'Reset Password',
+    component: ResetPasswordPage,
+    access: { kind: 'public' },
+  },
+  '/auth/verify-email': {
+    title: 'Verify Email',
+    component: VerifyEmailPage,
     access: { kind: 'public' },
   },
   '/admin/console': {
     title: 'Admin Console',
     component: AdminConsolePage,
     access: { kind: 'roles', allowedRoles: ['admin'] },
+  },
+  '/dev/bootstrap': {
+    title: 'Dev Bootstrap',
+    component: DevBootstrapPage,
+    access: { kind: 'public' },
   },
 }
 
@@ -48,8 +79,8 @@ const NOT_FOUND_ROUTE: RouteConfig = {
 }
 
 const LOGIN_REQUIRED_ROUTE: RouteConfig = {
-  title: 'Login Required',
-  component: LoginRequiredPage,
+  title: 'Authentication Required',
+  component: LoginPage,
   access: { kind: 'public' },
 }
 
