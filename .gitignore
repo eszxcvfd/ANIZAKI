@@ -49,3 +49,19 @@ local.settings.json
 # ------------------------------------------------------------
 .vscode/
 .idea/
+
+# ------------------------------------------------------------
+# Cleanup / temporary artifacts discovered by cleanup tool
+# These are non-destructive artifacts moved to tmp_cleanup/ by the cleanup helper
+# Review tmp_cleanup/ before deleting or restoring any files.
+# ------------------------------------------------------------
+tmp_cleanup/
+.git_status_paths.tmp
+next*.json
+next_bead*.json
+bead_*.txt
+bd_*.json
+triage*.json
+build*.txt
+test_out*.txt
+update_log*.txt
