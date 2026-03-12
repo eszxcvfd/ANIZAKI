@@ -2,6 +2,8 @@ using Anizaki.Application.Abstractions.Messaging;
 using Anizaki.Application.Abstractions.Validation;
 using Anizaki.Application.Features.Auth;
 using Anizaki.Application.Features.Auth.Contracts;
+using Anizaki.Application.Features.Library;
+using Anizaki.Application.Features.Library.Contracts;
 using Anizaki.Application.Features.SystemStatus;
 using Anizaki.Application.Features.SystemStatus.Contracts;
 using Anizaki.Application.Features.Users;
@@ -41,6 +43,16 @@ public static class DependencyInjection
 
         services.AddScoped<IRequestValidator<GetSystemStatusQuery>, GetSystemStatusQueryValidator>();
         services.AddScoped<IRequestHandler<GetSystemStatusQuery, SystemStatusResponse>, GetSystemStatusHandler>();
+
+        // Library feature
+        services.AddScoped<IRequestValidator<GetCategoriesQuery>, GetCategoriesQueryValidator>();
+        services.AddScoped<IRequestHandler<GetCategoriesQuery, GetCategoriesResponse>, GetCategoriesHandler>();
+        services.AddScoped<IRequestValidator<GetDrawingListQuery>, GetDrawingListQueryValidator>();
+        services.AddScoped<IRequestHandler<GetDrawingListQuery, GetDrawingListResponse>, GetDrawingListHandler>();
+        services.AddScoped<IRequestValidator<GetDrawingDetailQuery>, GetDrawingDetailQueryValidator>();
+        services.AddScoped<IRequestHandler<GetDrawingDetailQuery, GetDrawingDetailResponse>, GetDrawingDetailHandler>();
+        services.AddScoped<IRequestValidator<GetDrawingPreviewQuery>, GetDrawingPreviewQueryValidator>();
+        services.AddScoped<IRequestHandler<GetDrawingPreviewQuery, GetDrawingPreviewResponse>, GetDrawingPreviewHandler>();
 
         return services;
     }

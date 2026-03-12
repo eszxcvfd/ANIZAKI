@@ -4,6 +4,7 @@ using Anizaki.Application;
 using Anizaki.Application.Abstractions.Messaging;
 using Anizaki.Application.Exceptions;
 using Anizaki.Application.Features.Auth.Contracts;
+using Anizaki.Application.Features.Library.Contracts;
 using Anizaki.Application.Features.SystemStatus.Contracts;
 using Anizaki.Application.Features.Users.Contracts;
 using Anizaki.Infrastructure;
@@ -158,6 +159,7 @@ var v1 = app.MapGroup("/api/v1");
 var auth = v1.MapGroup("/auth");
 var users = v1.MapGroup("/users");
 var admin = v1.MapGroup("/admin").RequireAuthorization(AuthorizationPolicies.AdminOnly);
+var library = v1.MapGroup("/library");
 
 v1.MapGet("/system/status", async (
         string? correlationId,
@@ -315,6 +317,61 @@ admin.MapPut("/users/{id:guid}/role", async (
         return Results.Ok(response);
     })
     .WithName("UpdateUserRole")
+    .WithOpenApi();
+
+library.MapGet("/categories", async (
+        IRequestHandler<GetCategoriesQuery, GetCategoriesResponse> handler,
+        CancellationToken cancellationToken) =>
+    {
+        var response = await handler.HandleAsync(new GetCategoriesQuery(), cancellationToken);
+        return Results.Ok(response);
+    })
+    .WithName("GetLibraryCategories")
+    .WithOpenApi();
+
+library.MapGet("/drawings", async (
+        int? page,
+        int? pageSize,
+        string? category,
+        string? search,
+        string? sortBy,
+        string? sortDir,
+        IRequestHandler<GetDrawingListQuery, GetDrawingListResponse> handler,
+        CancellationToken cancellationToken) =>
+    {
+        var query = new GetDrawingListQuery(
+            Page:     page ?? 1,
+            PageSize: pageSize ?? 20,
+            Category: string.IsNullOrWhiteSpace(category) ? null : category.Trim(),
+            Search:   string.IsNullOrWhiteSpace(search)   ? null : search.Trim(),
+            SortBy:   string.IsNullOrWhiteSpace(sortBy)   ? null : sortBy.Trim(),
+            SortDir:  string.IsNullOrWhiteSpace(sortDir)  ? null : sortDir.Trim());
+        var response = await handler.HandleAsync(query, cancellationToken);
+        return Results.Ok(response);
+    })
+    .WithName("GetLibraryDrawings")
+    .WithOpenApi();
+
+library.MapGet("/drawings/{id:guid}", async (
+        Guid id,
+        IRequestHandler<GetDrawingDetailQuery, GetDrawingDetailResponse> handler,
+        CancellationToken cancellationToken) =>
+    {
+        var response = await handler.HandleAsync(new GetDrawingDetailQuery(id), cancellationToken);
+        return Results.Ok(response);
+    })
+    .WithName("GetLibraryDrawingDetail")
+    .WithOpenApi();
+
+library.MapGet("/drawings/{id:guid}/preview", async (
+        Guid id,
+        IRequestHandler<GetDrawingPreviewQuery, GetDrawingPreviewResponse> handler,
+        CancellationToken cancellationToken) =>
+    {
+        var response = await handler.HandleAsync(new GetDrawingPreviewQuery(id), cancellationToken);
+        return Results.Ok(response);
+    })
+    .WithName("GetLibraryDrawingPreview")
     .WithOpenApi();
 
 static string ResolveClientRateLimitKey(HttpContext httpContext)

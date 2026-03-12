@@ -69,6 +69,20 @@ public class ExceptionHandlingMiddleware
             return;
         }
 
+        if (exception is ResourceNotFoundException notFoundException)
+        {
+            _logger.LogInformation("Resource not found: {ResourceType} '{Identifier}'.",
+                notFoundException.ResourceType, notFoundException.Identifier);
+
+            httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            await httpContext.Response.WriteAsJsonAsync(new ApiErrorEnvelope(
+                Error: "not_found",
+                Message: notFoundException.Message,
+                CorrelationId: correlationId));
+
+            return;
+        }
+
         _logger.LogError(exception, "An unexpected error occurred.");
 
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;

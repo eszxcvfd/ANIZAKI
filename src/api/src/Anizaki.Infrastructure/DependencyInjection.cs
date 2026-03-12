@@ -1,6 +1,8 @@
 using Anizaki.Application.Features.Auth.Contracts;
+using Anizaki.Application.Features.Library.Contracts;
 using Anizaki.Application.Features.SystemStatus.Contracts;
 using Anizaki.Infrastructure.Auth;
+using Anizaki.Infrastructure.Library;
 using Anizaki.Infrastructure.SystemStatus;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,7 +21,8 @@ public static class DependencyInjection
         services.AddScoped<IAuthTokenService, BasicAuthTokenService>();
         services.AddScoped<IEmailSender, NoOpEmailSender>();
         services.AddScoped<ICurrentUserContext, UnauthenticatedCurrentUserContext>();
-        services.AddScoped<ISystemStatusProbe, SystemStatusProbe>();
+        services.AddSingleton<ISystemStatusProbe, SystemStatusProbe>();
+        services.AddSingleton<ILibraryRepository, InMemoryLibraryRepository>();
 
         return services;
     }
