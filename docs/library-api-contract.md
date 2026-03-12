@@ -46,6 +46,8 @@ This document defines the canonical JSON schema and endpoint contracts for the L
   - `code` -> `asc`
 - If `sortDir` is present without `sortBy`, apply it to the canonical default field `createdAt`.
 - User-driven changes to `category`, `search`, `sortBy`, `sortDir`, or `pageSize` reset `page` to `1`.
+- User-facing malformed `/library` deep links may be normalized by the frontend to canonical safe defaults; see `docs/library-url-normalization.md`.
+- Direct API misuse for supported invalid query params remains strict `400 validation_failed`; see `docs/library-api-fallback.md`.
 
 **Response Structure (200 OK):**
 
