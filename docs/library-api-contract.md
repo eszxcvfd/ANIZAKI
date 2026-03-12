@@ -48,6 +48,7 @@ This document defines the canonical JSON schema and endpoint contracts for the L
 - User-driven changes to `category`, `search`, `sortBy`, `sortDir`, or `pageSize` reset `page` to `1`.
 - User-facing malformed `/library` deep links may be normalized by the frontend to canonical safe defaults; see `docs/library-url-normalization.md`.
 - Direct API misuse for supported invalid query params remains strict `400 validation_failed`; see `docs/library-api-fallback.md`.
+- Deterministic secondary ordering and pagination stability rules are defined in `docs/library-ordering-stability.md`.
 
 **Response Structure (200 OK):**
 

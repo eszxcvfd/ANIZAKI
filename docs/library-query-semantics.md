@@ -72,7 +72,7 @@ If `sortBy` is present and `sortDir` is omitted, the backend/frontend MUST resol
 
 ### Scope note
 
-This bead defines the **primary sort contract only**. Deterministic secondary tie-breakers for pagination stability are defined by downstream bead `bd-38g.1.3` and must not contradict the primary field/direction rules above.
+This bead defines the **primary sort contract only**. Deterministic secondary tie-breakers for pagination stability are defined by `docs/library-ordering-stability.md` (bead `bd-38g.1.3`) and must not contradict the primary field/direction rules above.
 
 ---
 
